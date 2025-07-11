@@ -92,7 +92,7 @@ function zoomOutBy(factor) {
     const orbit = viewer.getCameraOrbit();
 
     // multiply radius by factor (e.g., 2 for 50% size)
-    const newRadius = orbit.radius * factor;
+    const newRadius = orbit.radius *2 factor;
 
     // apply
     viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
