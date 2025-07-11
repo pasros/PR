@@ -77,17 +77,18 @@ function fitHorizontally() {
   } else {
     viewer.fieldOfView = '25deg';
   }
+const orbit = viewer.getCameraOrbit();
 
-  // ensure camera is centered
-  viewer.cameraOrbit = '0deg 90deg auto';
+  // Orbit is a THREE-element object: theta, phi, radius
+  // Double the radius → zoom out → model appears 50% size
+  const newRadius = orbit.radius * 2;
+
+  // Apply the new orbit
+  viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
 }
 
 viewer.addEventListener('load', () => {
-  fitHorizontally();
-});
-
-window.addEventListener('resize', () => {
-  fitHorizontally();
+  fitHorizontallyAndZoomOut();
 });
 </script>
   </body>
