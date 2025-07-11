@@ -62,18 +62,30 @@
       </div>
       <div class="title-bottom-right">Baroque Skull Ring</div>
     </model-viewer>
-    <script>
+  <script>
 const viewer = document.getElementById('viewer');
 
-// When the model loads, adjust framing to fit screen
+function fitHorizontally() {
+  const aspect = window.innerWidth / window.innerHeight;
+
+  // adjust the field of view based on screen width
+  // narrower screen -> larger fov
+  if (aspect < 1) {
+    viewer.fieldOfView = '45deg';
+  } else {
+    viewer.fieldOfView = '25deg';
+  }
+
+  // ensure camera is centered
+  viewer.cameraOrbit = '0deg 90deg auto';
+}
+
 viewer.addEventListener('load', () => {
-  viewer.fieldOfView = 'auto'; // let it fit the screen automatically
-  viewer.cameraOrbit = 'auto'; // center the model
+  fitHorizontally();
 });
 
-// Optional: adjust FOV dynamically on resize (not strictly needed)
 window.addEventListener('resize', () => {
-  viewer.fieldOfView = 'auto';
+  fitHorizontally();
 });
 </script>
   </body>
