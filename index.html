@@ -2,18 +2,48 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Model Viewer Zoom Out Example</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Responsive Horizontal GLB Viewer</title>
 
 <style>
   html, body {
-    margin: 0; padding: 0; height: 100%; width: 100%; background: #777;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #777777;
     overflow: hidden;
   }
+
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #777777;
+    background-image: url('https://pasros.github.io/PR/ssg1.png');
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: contain;
+    z-index: 0;
+  }
+
   model-viewer {
     width: 100vw;
     height: 100vh;
     display: block;
+    z-index: 1;
+  }
+
+  .title-bottom-right {
+    font-family: Arial, sans-serif;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: black;
+    font-size: 15px;
+    z-index: 10;
   }
 </style>
 
@@ -21,32 +51,43 @@
 </head>
 
 <body>
+  <div class="background"></div>
 
-<model-viewer
-  id="viewer"
-  src="https://raw.githubusercontent.com/pasros/PR/main/BSRRR.glb"
-  camera-controls
-  auto-rotate
-  shadow-intensity="2"
-  ar
-  ar-modes="scene-viewer webxr quick-look"
-  style="background-color:#777"
-></model-viewer>
+  <model-viewer
+    id="viewer"
+    src="https://raw.githubusercontent.com/pasros/PR/main/BSRRR.glb"
+    ar
+    ar-modes="scene-viewer webxr quick-look"
+    camera-controls
+    tone-mapping="neutral"
+    poster="poster.webp"
+    shadow-intensity="2"
+    auto-rotate
+  >
+    <div class="progress-bar hide" slot="progress-bar">
+      <div class="update-bar"></div>
+    </div>
 
-<script>
-  const viewer = document.getElementById('viewer');
+    <div class="title-bottom-right">Baroque Skull Ring</div>
+  </model-viewer>
 
-  viewer.addEventListener('load', () => {
-    // Get current camera orbit (theta, phi, radius)
-    const orbit = viewer.getCameraOrbit();
-    // Increase radius by factor 3 to zoom out (make model smaller)
-    const newRadius = orbit.radius * 3;
-    // Set new orbit (theta, phi unchanged, radius changed)
-    viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
-    viewer.jumpCameraToGoal(); // Apply the new orbit immediately
-  });
-</script>
+  <script>
+    const viewer = document.getElementById('viewer');
 
+    viewer.addEventListener('load', () => {
+      viewer.zoomTo(); // frame the model first
+
+      requestAnimationFrame(() => {
+        const orbit = viewer.getCameraOrbit();
+
+        // Zoom out by doubling the radius (make model smaller)
+        const newRadius = orbit.radius * 2;
+
+        viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
+        viewer.jumpCameraToGoal();
+      });
+    });
+  </script>
 </body>
 </html>
 
