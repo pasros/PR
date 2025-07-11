@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=0.5">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Responsive Horizontal GLB Viewer</title>
 
 <style>
@@ -82,30 +82,33 @@
 <script>
 const viewer = document.getElementById('viewer');
 
-let originalRadius = null;
+let originalOrbit = null;
 
 function setZoom(factor) {
-  if (!originalRadius) {
-    const orbit = viewer.getCameraOrbit();
-    originalRadius = orbit.radius;
+  if (!originalOrbit) {
+    // Save the initial orbit once
+    originalOrbit = viewer.getCameraOrbit();
   }
 
-  const orbit = viewer.getCameraOrbit();
+  // always use the original theta/phi, and original radius × factor
+  const newRadius = originalOrbit.radius * factor;
 
-  const newRadius = originalRadius * factor;
-
-  viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
+  viewer.cameraOrbit = `${originalOrbit.theta}rad ${originalOrbit.phi}rad ${newRadius}m`;
   viewer.jumpCameraToGoal();
 }
 
+// Ensure the model is fully framed before applying zoom
 viewer.addEventListener('load', () => {
-  setZoom(2); // zoom out to 50% size (2× radius)
+  setTimeout(() => {
+    setZoom(2); // make the model appear smaller
+  }, 100);
 });
 
 window.addEventListener('resize', () => {
   setZoom(2);
 });
 </script>
+
 </body>
 </html>
 
