@@ -64,20 +64,21 @@
       </div>
       <div class="title-bottom-right">Baroque Skull Ring</div>
     </model-viewer>
-  <script>
+<script>
 const viewer = document.getElementById('viewer');
 
-function fitHorizontally() {
+function fitHorizontallyAndZoomOut() {
   const aspect = window.innerWidth / window.innerHeight;
 
-  // adjust the field of view based on screen width
-  // narrower screen -> larger fov
+  // Adjust FOV based on screen shape
   if (aspect < 1) {
     viewer.fieldOfView = '45deg';
   } else {
     viewer.fieldOfView = '25deg';
   }
-const orbit = viewer.getCameraOrbit();
+
+  // Get the default camera orbit
+  const orbit = viewer.getCameraOrbit();
 
   // Orbit is a THREE-element object: theta, phi, radius
   // Double the radius → zoom out → model appears 50% size
@@ -90,6 +91,11 @@ const orbit = viewer.getCameraOrbit();
 viewer.addEventListener('load', () => {
   fitHorizontallyAndZoomOut();
 });
+
+window.addEventListener('resize', () => {
+  fitHorizontallyAndZoomOut();
+});
 </script>
+
   </body>
 </html>
