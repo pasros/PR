@@ -67,35 +67,40 @@
 <script>
 const viewer = document.getElementById('viewer');
 
-function fitHorizontallyAndZoomOut() {
+function zoomOutBy(factor) {
   const aspect = window.innerWidth / window.innerHeight;
 
-  // Adjust FOV based on screen shape
+  // Optional: adjust FOV for horizontal fit
   if (aspect < 1) {
     viewer.fieldOfView = '45deg';
   } else {
     viewer.fieldOfView = '25deg';
   }
 
-  // Get the default camera orbit
-  const orbit = viewer.getCameraOrbit();
+  // Wait for model to render before overriding
+  requestAnimationFrame(() => {
+    const orbit = viewer.getCameraOrbit();
 
-  // Orbit is a THREE-element object: theta, phi, radius
-  // Double the radius → zoom out → model appears 50% size
-  const newRadius = orbit.radius * 2;
+    // multiply radius by factor (e.g., 2 for 50% size)
+    const newRadius = orbit.radius * factor;
 
-  // Apply the new orbit
-  viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
+    // apply
+    viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
+
+    // prevent viewer from resetting it
+    viewer.jumpCameraToGoal();
+  });
 }
 
 viewer.addEventListener('load', () => {
-  fitHorizontallyAndZoomOut();
+  zoomOutBy(2); // make it appear 50% (zoomed out)
 });
 
 window.addEventListener('resize', () => {
-  fitHorizontallyAndZoomOut();
+  zoomOutBy(2);
 });
 </script>
+
 
   </body>
 </html>
