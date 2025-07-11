@@ -74,28 +74,36 @@
 <script>
 const viewer = document.getElementById('viewer');
 
-async function setZoom(factor) {
-  await viewer.updateComplete; // wait for rendering to finish
+async function adjustZoom() {
+  await viewer.updateComplete;
 
   const orbit = viewer.getCameraOrbit();
-  const newRadius = orbit.radius * factor;
+
+  const minDim = Math.min(window.innerWidth, window.innerHeight);
+  const targetFraction = 0.3; // you want the model to fill about 30%
+  
+  // base radius corresponds to 100% fill
+  const baseRadius = orbit.radius;
+  // adjust factor so it takes ~30% of min dimension
+  // note: this is an approximation, because the model’s bounding box & field of view also matter.
+
+  // Here we assume linear scaling, so we simply set radius proportional to 1/targetFraction
+  const factor = 1 / targetFraction;
+
+  const newRadius = baseRadius * factor;
 
   viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
   viewer.jumpCameraToGoal();
 }
 
 viewer.addEventListener('load', () => {
-  setZoom(2); // make the model appear smaller
+  adjustZoom();
 });
 
 window.addEventListener('resize', () => {
-  setZoom(2);
+  adjustZoom();
 });
 </script>
 
 </body>
-</html>
-
-
-  </body>
 </html>
