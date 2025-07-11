@@ -82,32 +82,28 @@
 <script>
 const viewer = document.getElementById('viewer');
 
-function zoomOutBy(factor) {
-  const aspect = window.innerWidth / window.innerHeight;
+let originalRadius = null;
 
-  if (aspect < 1) {
-    viewer.fieldOfView = '45deg';
-  } else {
-    viewer.fieldOfView = '25deg';
+function setZoom(factor) {
+  if (!originalRadius) {
+    const orbit = viewer.getCameraOrbit();
+    originalRadius = orbit.radius;
   }
 
-  requestAnimationFrame(() => {
-    const orbit = viewer.getCameraOrbit();
+  const orbit = viewer.getCameraOrbit();
 
-    const newRadius = orbit.radius * factor;
+  const newRadius = originalRadius * factor;
 
-    viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
-
-    viewer.jumpCameraToGoal();
-  });
+  viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
+  viewer.jumpCameraToGoal();
 }
 
 viewer.addEventListener('load', () => {
-  zoomOutBy(4); // zoom out to 50% size
+  setZoom(2); // zoom out to 50% size (2× radius)
 });
 
 window.addEventListener('resize', () => {
-  zoomOutBy(4);
+  setZoom(2);
 });
 </script>
 </body>
