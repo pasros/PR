@@ -62,5 +62,19 @@
       </div>
       <div class="title-bottom-right">Baroque Skull Ring</div>
     </model-viewer>
+    <script>
+const viewer = document.getElementById('viewer');
+
+// When the model loads, adjust framing to fit screen
+viewer.addEventListener('load', () => {
+  viewer.fieldOfView = 'auto'; // let it fit the screen automatically
+  viewer.cameraOrbit = 'auto'; // center the model
+});
+
+// Optional: adjust FOV dynamically on resize (not strictly needed)
+window.addEventListener('resize', () => {
+  viewer.fieldOfView = 'auto';
+});
+</script>
   </body>
 </html>
