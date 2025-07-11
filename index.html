@@ -51,59 +51,58 @@
 </head>
 
 <body>
-  <div class="background"></div>
+<div class="background"></div>
 
-  <model-viewer
-    id="viewer"
-    src="https://raw.githubusercontent.com/pasros/PR/main/BSRRR.glb"
-    ar
-    ar-modes="scene-viewer webxr quick-look"
-    camera-controls
-    tone-mapping="neutral"
-    poster="poster.webp"
-    shadow-intensity="2"
-    auto-rotate
-  >
-    <div class="progress-bar hide" slot="progress-bar">
-      <div class="update-bar"></div>
-    </div>
+<model-viewer
+  id="viewer"
+  src="https://raw.githubusercontent.com/pasros/PR/main/BSRRR.glb"
+  ar
+  ar-modes="scene-viewer webxr quick-look"
+  camera-controls
+  tone-mapping="neutral"
+  poster="poster.webp"
+  shadow-intensity="2"
+  auto-rotate>
+  <div class="progress-bar hide" slot="progress-bar">
+    <div class="update-bar"></div>
+  </div>
 
-    <div class="title-bottom-right">Baroque Skull Ring</div>
-  </model-viewer>
+  <div class="title-bottom-right">Baroque Skull Ring</div>
+</model-viewer>
 
 <script>
 const viewer = document.getElementById('viewer');
 
-async function adjustZoom() {
+async function fitAndZoomOut() {
   await viewer.updateComplete;
 
-  const orbit = viewer.getCameraOrbit();
+  // Frame the model first so the camera fits it perfectly
+  viewer.zoomTo();
 
-  const minDim = Math.min(window.innerWidth, window.innerHeight);
-  const targetFraction = 0.3; // you want the model to fill about 30%
-  
-  // base radius corresponds to 100% fill
-  const baseRadius = orbit.radius;
-  // adjust factor so it takes ~30% of min dimension
-  // note: this is an approximation, because the model’s bounding box & field of view also matter.
+  // Wait for the zoomTo to take effect
+  requestAnimationFrame(() => {
+    const orbit = viewer.getCameraOrbit();
 
-  // Here we assume linear scaling, so we simply set radius proportional to 1/targetFraction
-  const factor = 1 / targetFraction;
+    // Increase the radius to zoom out
+    const factor = 1 / 0.3;  // because 30% means ~3× smaller
+    const newRadius = orbit.radius * factor;
 
-  const newRadius = baseRadius * factor;
-
-  viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
-  viewer.jumpCameraToGoal();
+    viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
+    viewer.jumpCameraToGoal();
+  });
 }
 
+// adjust on load and resize
 viewer.addEventListener('load', () => {
-  adjustZoom();
+  fitAndZoomOut();
 });
 
 window.addEventListener('resize', () => {
-  adjustZoom();
+  fitAndZoomOut();
 });
 </script>
 
 </body>
 </html>
+
+
