@@ -71,38 +71,6 @@
   <div class="title-bottom-right">Baroque Skull Ring</div>
 </model-viewer>
 
-<script>
-const viewer = document.getElementById('viewer');
-
-async function fitAndZoomOut() {
-  await viewer.updateComplete;
-
-  // Frame the model first so the camera fits it perfectly
-  viewer.zoomTo();
-
-  // Wait for the zoomTo to take effect
-  requestAnimationFrame(() => {
-    const orbit = viewer.getCameraOrbit();
-
-    // Increase the radius to zoom out
-    const factor = 1 / 0.3;  // because 30% means ~3× smaller
-    const newRadius = orbit.radius * factor;
-
-    viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
-    viewer.jumpCameraToGoal();
-  });
-}
-
-// adjust on load and resize
-viewer.addEventListener('load', () => {
-  fitAndZoomOut();
-});
-
-window.addEventListener('resize', () => {
-  fitAndZoomOut();
-});
-</script>
-
 </body>
 </html>
 
