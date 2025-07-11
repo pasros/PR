@@ -41,14 +41,6 @@
     ></script>
   </head>
   <body>
-    <model-viewer
-  id="viewer"
-  src="your-model.glb"
-  camera-controls
-  tone-mapping="neutral"
-  shadow-intensity="1"
-  auto-rotate
->
     <model-viewer  src="https://raw.githubusercontent.com/pasros/PR/main/BSRRR.glb"ar ar-modes="scene-viewer webxr quick-look" camera-controls tone-mapping="neutral" poster="poster.webp" shadow-intensity=".2" shadow-softness="0.58" auto-rotate exposure="0.74"
       ar
       ar-modes="webxr scene-viewer quick-look"
@@ -71,6 +63,17 @@
       </div>
       <div class="title-bottom-right">Baroque Skull Ring</div>
     </model-viewer>
+
+    <model-viewer
+  id="viewer"
+  src="your-model.glb"
+  camera-controls
+  tone-mapping="neutral"
+  shadow-intensity="1"
+  auto-rotate
+>
+</model-viewer>
+
 <script>
 const viewer = document.getElementById('viewer');
 
