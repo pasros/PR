@@ -1,78 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Responsive Horizontal GLB Viewer</title>
 
-    <style>
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-        background-color: #777777;
-      }
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #777777;
+    overflow: hidden;
+  }
 
-      model-viewer {
-        width: 100vw;
-        height: 100vh;
-        display: block;
-        background-color: #777777;
-      }
-    </style>
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #777777;
+    background-image: url('https://pasros.github.io/PR/sfondosmall.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain; /* or cover if you prefer */
+    z-index: 0;
+  }
 
-    <style>
-      .title-bottom-right {
-        font-family: Arial, sans-serif;
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        color: black;
-        font-size: 15px;
+  model-viewer {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    z-index: 1;
+  }
 
-        z-index: 10;
-      }
-    </style>
-    <script
-      type="module"
-      src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
-    ></script>
-  </head>
-  <body>
-    <model-viewer  src="https://raw.githubusercontent.com/pasros/PR/main/BSRRR.glb"ar ar-modes="scene-viewer webxr quick-look" camera-controls tone-mapping="neutral" poster="poster.webp" shadow-intensity=".2" shadow-softness="0.58" auto-rotate exposure="0.74"
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      camera-controls
-      tone-mapping="neutral"
-      poster="poster.webp"
-      shadow-intensity="2"
-    >
-      <div class="progress-bar hide" slot="progress-bar">
-        <div class="update-bar"></div>
-      </div>
-    
-      <div id="ar-prompt">
-        <img
-          src="https://pasqualerossi.wordpress.com/wp-content/uploads/2024/11/black.png"
-          width="70"
-          height="70"
-          style="margin-top: 20px; margin-left: 20px"
-        />
-      </div>
-      <div class="title-bottom-right">Baroque Skull Ring</div>
-    </model-viewer>
+  .title-bottom-right {
+    font-family: Arial, sans-serif;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: black;
+    font-size: 15px;
+    z-index: 10;
+  }
+</style>
 
-    <model-viewer
-  id="viewer"
-  src="your-model.glb"
-  camera-controls
-  tone-mapping="neutral"
-  shadow-intensity="1"
-  auto-rotate
->
-</model-viewer>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+</head>
+
+<body>
+  <div class="background"></div>
+
+  <model-viewer
+    id="viewer"
+    src="https://raw.githubusercontent.com/pasros/PR/main/BSRRR.glb"
+    ar
+    ar-modes="scene-viewer webxr quick-look"
+    camera-controls
+    tone-mapping="neutral"
+    poster="poster.webp"
+    shadow-intensity="2"
+    auto-rotate
+  >
+    <div class="progress-bar hide" slot="progress-bar">
+      <div class="update-bar"></div>
+    </div>
+
+    <div id="ar-prompt">
+      <img
+        src="https://pasqualerossi.wordpress.com/wp-content/uploads/2024/11/black.png"
+        width="70"
+        height="70"
+        style="margin-top: 20px; margin-left: 20px"
+      />
+    </div>
+    <div class="title-bottom-right">Baroque Skull Ring</div>
+  </model-viewer>
 
 <script>
 const viewer = document.getElementById('viewer');
@@ -80,36 +85,33 @@ const viewer = document.getElementById('viewer');
 function zoomOutBy(factor) {
   const aspect = window.innerWidth / window.innerHeight;
 
-  // Optional: adjust FOV for horizontal fit
   if (aspect < 1) {
     viewer.fieldOfView = '45deg';
   } else {
     viewer.fieldOfView = '25deg';
   }
 
-  // Wait for model to render before overriding
   requestAnimationFrame(() => {
     const orbit = viewer.getCameraOrbit();
 
-    // multiply radius by factor (e.g., 2 for 50% size)
-    const newRadius = orbit.radius *2 factor;
+    const newRadius = orbit.radius * factor;
 
-    // apply
     viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
 
-    // prevent viewer from resetting it
     viewer.jumpCameraToGoal();
   });
 }
 
 viewer.addEventListener('load', () => {
-  zoomOutBy(2); // make it appear 50% (zoomed out)
+  zoomOutBy(2); // zoom out to 50% size
 });
 
 window.addEventListener('resize', () => {
   zoomOutBy(2);
 });
 </script>
+</body>
+</html>
 
 
   </body>
