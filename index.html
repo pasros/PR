@@ -25,7 +25,7 @@
     background-image: url('https://pasros.github.io/PR/ssg1.png');
     background-repeat: no-repeat;
     background-position: center left;
-    background-size: contain; /* or cover if you prefer */
+    background-size: contain;
     z-index: 0;
   }
 
@@ -74,26 +74,18 @@
 <script>
 const viewer = document.getElementById('viewer');
 
-let originalOrbit = null;
+async function setZoom(factor) {
+  await viewer.updateComplete; // wait for rendering to finish
 
-function setZoom(factor) {
-  if (!originalOrbit) {
-    // Save the initial orbit once
-    originalOrbit = viewer.getCameraOrbit();
-  }
+  const orbit = viewer.getCameraOrbit();
+  const newRadius = orbit.radius * factor;
 
-  // always use the original theta/phi, and original radius × factor
-  const newRadius = originalOrbit.radius * factor;
-
-  viewer.cameraOrbit = `${originalOrbit.theta}rad ${originalOrbit.phi}rad ${newRadius}m`;
+  viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
   viewer.jumpCameraToGoal();
 }
 
-// Ensure the model is fully framed before applying zoom
 viewer.addEventListener('load', () => {
-  setTimeout(() => {
-    setZoom(2); // make the model appear smaller
-  }, 500);
+  setZoom(2); // make the model appear smaller
 });
 
 window.addEventListener('resize', () => {
