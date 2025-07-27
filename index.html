@@ -70,24 +70,6 @@
 
     <div class="title-bottom-right">Baroque Skull Ring</div>
   </model-viewer>
-
-  <script>
-    const viewer = document.getElementById('viewer');
-
-    viewer.addEventListener('load', () => {
-      viewer.zoomTo(); // frame the model first
-
-      requestAnimationFrame(() => {
-        const orbit = viewer.getCameraOrbit();
-
-        // Zoom out by doubling the radius (make model smaller)
-        const newRadius = orbit.radius * 2;
-
-        viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
-        viewer.jumpCameraToGoal();
-      });
-    });
-  </script>
 </body>
 </html>
 
